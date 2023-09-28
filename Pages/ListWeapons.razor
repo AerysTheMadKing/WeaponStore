@@ -1,0 +1,83 @@
+﻿@page "/"
+@using AuthSystem.Areas.Identity.Data;
+@using AuthSystem.Data;
+@using Microsoft.EntityFrameworkCore
+
+@inject IDbContextFactory<AuthDbContext> AuthDbContextFactory;
+
+
+<h1 class="text-center">Welcome to our page Auto.kg</h1>
+
+@if (@OurWeapons is not null && @OurWeapons.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered table-light border-dark">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Created_at</th>
+                    <th scope="col">Updated_at</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var car in @OurWeapons)
+                {
+                    @if (!@EditRecord)
+                    {
+                        <tr>
+                            <th scope="row">@car.Id</th>
+                            <td>@car.Title</td>
+                            <td>@car.Price</td>
+                            <td>@car.Description</td>
+                            <td><img src="@car.Image" width="170" height="170" /></td>
+                            <td>@car.Created_at</td>
+                            <td>@car.Updated_at</td>
+                            <td> <button name="submit" type="submit" class="btn btn-primary" @onclick="() => ShowEditForm(car)">Edit</button></td>
+                            <td><button name="submit" type="submit" class="btn btn-primary" @onclick="() => DeleteWeapon(car)">Delete</button></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        if (@WeaponToUpdate is not null && @WeaponToUpdate.Id == @car.Id)
+                        {
+                            <tr>
+                                <th scope="row">@car.Id</th>
+                                <td><input id="Title" name="Title" type="text" class="form-control" @bind="@WeaponToUpdate.Title" /></td>
+                                <td><input id="Price" name="Price" type="text" class="form-control" @bind="@WeaponToUpdate.Price" /></td>
+                                <td><input id="Description" name="Description" type="text" class="form-control" @bind="@WeaponToUpdate.Description" /></td>
+                                <td><input id="Created_at" name="Created_at" type="text" class="form-control" @bind="@WeaponToUpdate.Created_at" /></td>
+                                <td><input id="Updated_at" name="Updated_at" type="text" class="form-control" @bind="@WeaponToUpdate.Updated_at" /></td>
+                                <td> <input id="Image" name="Image" type="text" class="form-control" @bind="@WeaponToUpdate.Image" /></td>
+                                <td> <button name="submit" type="submit" class="btn btn-primary" @onclick="@UpdateWeapon">Save</button></td>
+                                <td></td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <th scope="row">@car.Id</th>
+                                <td>@car.Title</td>
+                                <td>@car.Price</td>
+                                <td>@car.Description</td>
+                                <td>@car.Created_at</td>
+                                <td>@car.Updated_at</td>
+                                <td><img src="@car.Image" width="50" height="50" /></td>
+                                <td> <button name="submit" type="submit" class="btn btn-primary" @onclick="() => ShowEditForm(car)">Edit</button></td>
+                                <td><button name="submit" type="submit" class="btn btn-primary" @onclick="() => DeleteWeapon(car)">Delete</button></td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+}
+
